@@ -1,16 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import register from "../../assets/register.webp";
+import { registration } from '../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("User Registerd:", {name, email, password});
+
+        // Dispatch registration action
+        const res = await dispatch(registration({ name, email, password }));
+
+        console.log("Registration response:", res); // Debugging line to check the response
+        
+        if (res.meta.requestStatus === "fulfilled") {
+            if (res.payload?.message && res.payload.message.includes("OTP")) {
+                // If OTP was sent or resent, show message and navigate to verify OTP page
+                console.log("OTP Sent or Resent, now verify.");
+                navigate("/verify", { state: { email } });
+            } else {
+                // New user registration or other case, navigate to verify page as well
+                navigate("/verify", { state: { email } });
+            }
+        } else {
+            console.error("Registration failed:", res.payload);
+            // Show error message to the user (optional)
+            alert(res.payload?.message || "Registration failed. Please try again.");
+        }
     };
 
     return (
@@ -57,7 +80,7 @@ const Register = () => {
             </div>
             <div className='hidden md:block w-1/2 bg-gray-800'>
                 <div className='h-full flex flex-col justify-center items-center'>
-                    <img src={register} alt="Login to Account" className='h-[750px] w-full object-cover'/>
+                    <img src={register} alt="Login to Account" className='h-[750px] w-full object-cover' />
                 </div>
             </div>
         </div>

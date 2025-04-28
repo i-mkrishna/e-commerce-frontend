@@ -1,7 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const ProductGrid = ({ products }) => {
+const ProductGrid = ({ products, loading, error }) => {
+    if (loading) {
+        return <div className='text-center'>Loading...</div>
+    }
+    if (error) {
+        return <div className='text-center text-red-500'>{error}</div>
+    }
+
+    console.log("inside product grid", products);
+
     return (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
             {products.map((product, index) => (
