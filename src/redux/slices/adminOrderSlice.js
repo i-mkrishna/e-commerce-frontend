@@ -19,7 +19,7 @@ export const fetchAllOrders = createAsyncThunk(
         throw new Error("Failed to fetch orders");
       }
       const data = await response.json();
-      return data.orders;
+      return data;
     } catch (error) {
       console.error("Error fetching orders:", error);
       return rejectWithValue(error.message);
@@ -74,7 +74,7 @@ export const updateOrderStatus = createAsyncThunk(
         throw new Error("Failed to update order status");
       }
       const data = await response.json();
-      return data.order;
+      return data;
     } catch (error) {
       console.error("Error updating order status:", error);
       return rejectWithValue(error.message);
@@ -128,12 +128,11 @@ const adminOrderSlice = createSlice({
       .addCase(fetchAllOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.orders = action.payload;
-        state.totalOrders = action.payload.length;
-        state.totalSales = action.payload.reduce(
-          (acc, order) => acc + order.totalPrice,
-          0
-        );
-      })
+        state.totalOrders = Array.isArray(action.payload) ? action.payload.length : 0;
+        state.totalSales = Array.isArray(action.payload)
+          ? action.payload.reduce((acc, order) => acc + order.totalPrice, 0)
+          : 0;
+      })      
       .addCase(fetchAllOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

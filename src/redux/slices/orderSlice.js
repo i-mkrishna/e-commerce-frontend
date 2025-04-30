@@ -7,7 +7,7 @@ export const fetchUserOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}api/orders`,
+        `${import.meta.env.VITE_BACKEND_URL}api/orders/my-orders`,
         {
           method: "GET",
           headers: {

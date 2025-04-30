@@ -19,7 +19,7 @@ export const fetchAdminProducts = createAsyncThunk(
         throw new Error("Failed to fetch products");
       }
       const data = await response.json();
-      return data.products;
+      return data;
     } catch (error) {
       console.error("Error fetching products:", error);
       return rejectWithValue(error.message);
@@ -61,7 +61,7 @@ export const updateProduct = createAsyncThunk(
   async ({ id, productData }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}api/admin/products/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}api/products/update/${id}`,
         {
           method: "PUT",
           headers: {
@@ -75,7 +75,7 @@ export const updateProduct = createAsyncThunk(
         throw new Error("Failed to update product");
       }
       const data = await response.json();
-      return data.product;
+      return data;
     } catch (error) {
       console.error("Error updating product:", error);
       return rejectWithValue(error.message);
@@ -89,7 +89,7 @@ export const deleteProduct = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}api/admin/products/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}api/products/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -102,7 +102,7 @@ export const deleteProduct = createAsyncThunk(
         throw new Error("Failed to delete product");
       }
       const data = await response.json();
-      return data.product;
+      return { _id: id };
     } catch (error) {
       console.error("Error deleting product:", error);
       return rejectWithValue(error.message);
@@ -111,74 +111,74 @@ export const deleteProduct = createAsyncThunk(
 );
 
 const adminProductSlice = createSlice({
-    name: "adminProduct",
-    initialState: {
-        products: [],
-        loading: false,
-        error: null,
-    },
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchAdminProducts.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchAdminProducts.fulfilled, (state, action) => {
-                state.loading = false;
-                state.products = action.payload;
-            })
-            .addCase(fetchAdminProducts.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || "Failed to fetch products";
-            })
-            .addCase(addProduct.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(addProduct.fulfilled, (state, action) => {
-                state.loading = false;
-                state.products.push(action.payload);
-            })
-            .addCase(addProduct.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
-            .addCase(updateProduct.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(updateProduct.fulfilled, (state, action) => {
-                state.loading = false;
-                const index = state.products.findIndex(
-                    (product) => product._id === action.payload._id
-                );
-                if (index !== -1) {
-                    state.products[index] = action.payload;
-                }
-            })
-            .addCase(updateProduct.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
-            .addCase(deleteProduct.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(deleteProduct.fulfilled, (state, action) => {
-                state.loading = false;
-                const index = state.products.findIndex(
-                    (product) => product._id === action.payload._id
-                );
-                if (index !== -1) {
-                    state.products.splice(index, 1);
-                }
-            })
-            .addCase(deleteProduct.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
-    },
+  name: "adminProduct",
+  initialState: {
+    products: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAdminProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdminProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+      })
+      .addCase(fetchAdminProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch products";
+      })
+      .addCase(addProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products.push(action.payload);
+      })
+      .addCase(addProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.products.findIndex(
+          (product) => product._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.products.findIndex(
+          (product) => product._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.products.splice(index, 1);
+        }
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
 
 export default adminProductSlice.reducer;

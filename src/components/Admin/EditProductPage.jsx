@@ -1,7 +1,18 @@
 import { useState } from "react"
-
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchProductById } from "../../redux/slices/productSlice";
+import { updateProduct } from "../../redux/slices/adminProductSlice";
 
 const EditProductPage = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { id } = useParams();
+
+    const { selectedProduct, loading, error } = useSelector((state) => state.products);
 
     const [productData, setProductData] = useState({
         name: "",
@@ -16,15 +27,32 @@ const EditProductPage = () => {
         collection: "",
         material: "",
         gender: "",
-        images: [
-            {
-                url: "https://picsum.photos/150?random=1"
-            },
-            {
-                url: "https://picsum.photos/150?random=2"
-            },
-        ],
+        images: [],
     });
+    const [imageFiles, setImageFiles] = useState([]);
+
+
+    const [uploading, setUploading] = useState(false);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchProductById(id));
+        }
+
+
+    }, [dispatch, id]);
+
+    useEffect(() => {
+        if (selectedProduct) {
+            setProductData(selectedProduct);
+        }
+
+    }, [selectedProduct])
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setImageFiles(files);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,13 +61,77 @@ const EditProductPage = () => {
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
-        console.log(file);
+        const formData = new FormData();
+        formData.append("image", file);
+        setUploading(true);
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api/upload`, {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Upload failed");
+            }
+
+            const data = await response.json();
+            setProductData((prevData) => ({
+                ...prevData,
+                images: [...prevData.images, data.imageUrl],
+            }));
+        } catch (error) {
+            console.error("Image upload failed:", error);
+        } finally {
+            setUploading(false);
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(productData);
-    };
+        setUploading(true);
+      
+        try {
+          const uploadedImageObjects = [];
+      
+          for (const file of imageFiles) {
+            const formData = new FormData();
+            formData.append("image", file);
+      
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api/upload`, {
+              method: "POST",
+              body: formData,
+            });
+      
+            if (!response.ok) {
+              throw new Error("Image upload failed");
+            }
+      
+            const data = await response.json();
+            uploadedImageObjects.push({ url: data.imageUrl, altText: "" }); // You can add altText later if needed
+          }
+      
+          const finalProductData = {
+            ...productData,
+            images: [...productData.images, ...uploadedImageObjects], // Merge new images with existing ones
+          };
+      
+          console.log("Final product data:", finalProductData);
+      
+          await dispatch(updateProduct({ id, productData: finalProductData })).unwrap();
+          navigate("/admin/products");
+        } catch (err) {
+          console.error("Product update failed:", err);
+          alert(err.message || "Failed to update product");
+        } finally {
+          setUploading(false);
+        }
+      };
+      
+
+
+    if (loading) return <p>loading...</p>
+    if (error) return <p>Error : {error}</p>
 
     return (
         <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
@@ -72,7 +164,7 @@ const EditProductPage = () => {
                 {/* SKU */}
                 <div className="mb-6">
                     <label className="block font-semibold mb-2">SKU</label>
-                    <input type="text" name="sku" value={productData.sku} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
+                    <input type="text" name="sku" value={productData.sku} disabled className="w-full border border-gray-300 rounded-md p-2" />
                 </div>
                 {/* Sizes */}
                 <div className="mb-6">
@@ -109,13 +201,21 @@ const EditProductPage = () => {
                 {/* Image Upload */}
                 <div className="mb-6">
                     <label className="block font-semibold mb-2">Upload Image</label>
-                    <input type="file" onChange={handleImageUpload} />
+                    <input type="file" multiple onChange={handleImageChange} />
                     <div className="flex gap-4 mt-4">
-                        {productData.images.map((image, index) => (
-                            <div key={image.url}>
-                                <img src={image.url} alt={image.altText || "Product Image"} className="w-20 h-20 object-cover rounded-md shadow-md" />
-                            </div>
-                        ))}
+                        {productData.images.map((image, index) => {
+                            const imageUrl = typeof image === "string" ? image : image?.url;
+                            return (
+                                <div key={imageUrl || index}>
+                                    <img
+                                        src={imageUrl}
+                                        alt={image?.altText || "Product Image"}
+                                        className="w-20 h-20 object-cover rounded-md shadow-md"
+                                    />
+                                </div>
+                            );
+                        })}
+
                     </div>
                 </div>
                 <button type="submit" className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors">Update Product</button>

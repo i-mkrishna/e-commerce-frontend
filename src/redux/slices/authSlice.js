@@ -44,6 +44,7 @@ const initialState = {
 //     }
 //   );
 
+
 // Async thunk for user login
 const loginUser = createAsyncThunk(
   "auth/loginUser",
@@ -67,7 +68,8 @@ const loginUser = createAsyncThunk(
       const data = await response.json();
       localStorage.setItem("userInfo", JSON.stringify(data));
       localStorage.setItem("userToken", data.token);
-      return data.user; // Return the user object from the response
+      console.log(data);
+      return data; // Return the user object from the response
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -97,7 +99,7 @@ const registration = createAsyncThunk(
       const data = await response.json();
       localStorage.setItem("userInfo", JSON.stringify(data));
       localStorage.setItem("userToken", data.token);
-      return data.user; // Return the user object from the response
+      return data; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -130,6 +132,31 @@ const verifyOtp = createAsyncThunk(
   }
 );
 
+export const fetchUserFromToken = createAsyncThunk(
+  "auth/fetchUserFromToken",
+  async (_, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}api/users/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!response.ok) throw new Error("Unauthorized");
+
+      const user = await response.json();
+      localStorage.setItem("userInfo", JSON.stringify(user));
+      return { ...user, token };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 
 // Slice
 const authSlice = createSlice({
@@ -148,6 +175,13 @@ const authSlice = createSlice({
       state.guestId = newGuestId;
       localStorage.setItem("guestId", newGuestId); // Store the new guest ID
     },
+    setUserFromToken: (state, action) => {
+      const { user, token } = action.payload;
+      state.user = user;
+      localStorage.setItem("userInfo", JSON.stringify(user));
+      localStorage.setItem("userToken", token);
+      console.log("userToken", token);
+    }    
   },
   extraReducers: (builder) => {
     builder
@@ -165,7 +199,7 @@ const authSlice = createSlice({
       })
       .addCase(registration.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.user = null;
       })
       .addCase(registration.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -205,6 +239,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, generateNewGuestId } = authSlice.actions;
+export const { logout, generateNewGuestId, setUserFromToken } = authSlice.actions;
 export { loginUser, registration, verifyOtp };
 export default authSlice.reducer;

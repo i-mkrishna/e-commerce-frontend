@@ -1,19 +1,47 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import login from "../../assets/login.webp";
 import { loginUser } from '../../redux/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { mergeCart } from '../../redux/slices/cartSlice';
+
+
 
 const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { user, guestId, loading } = useSelector((state) => state.auth);
+    const { cart } = useSelector((state) => state.cart);
 
-    const handleSubmit = (e) =>{
+    // Get redirect parameter and check if it's checkout or somethinng
+
+    const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+
+    const isCheckoutRedirect = redirect.includes("checkout");
+
+    useEffect(() => {
+        if (user) {
+            if (cart?.products.length > 0 && guestId) {
+                dispatch(mergeCart({ guestId, user })).then(() => {
+                    navigate(isCheckoutRedirect ? "/checkout" : "/");
+                });
+            }
+            else {
+                navigate(isCheckoutRedirect ? "/checkout" : "/");
+            }
+        }
+
+    }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
+
+
+    const handleSubmit = (e) => {
         e.preventDefault();
         // console.log("User logined:", {email, password});
-        dispatch(loginUser({email, password}))
+        dispatch(loginUser({ email, password }))
     };
 
 
@@ -44,15 +72,29 @@ const Login = () => {
                             placeholder='Enter your Password'
                         />
                     </div>
-                    <button type='submit' className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'>Sign In</button>
+                    <button type='submit' className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'>{loading ? "loading..." : "Sign In"}</button>
+                    <div className="mt-6">
+                        <p className="text-sm text-center text-gray-500 mb-3">Or continue with</p>
+                        <a
+                            href={`${import.meta.env.VITE_BACKEND_URL}api/users/google`}
+                            className="w-full flex items-center justify-center gap-3 px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                        >
+                            <img
+                                src="https://developers.google.com/identity/images/g-logo.png"
+                                alt="Google"
+                                className="w-5 h-5"
+                            />
+                            Sign in with Google
+                        </a>
+                    </div>
                     <p className='mt-6 text-center text-sm'>Don't have an account?{" "}
-                        <Link to="/register" className='text-blue-500'>Register</Link>
+                        <Link to={`/register?redirect=${encodeURIComponent(redirect)}`} className='text-blue-500'>Register</Link>
                     </p>
                 </form>
             </div>
             <div className='hidden md:block w-1/2 bg-gray-800'>
                 <div className='h-full flex flex-col justify-center items-center'>
-                    <img src={login} alt="Login to Account" className='h-[750px] w-full object-cover'/>
+                    <img src={login} alt="Login to Account" className='h-[750px] w-full object-cover' />
                 </div>
             </div>
         </div>

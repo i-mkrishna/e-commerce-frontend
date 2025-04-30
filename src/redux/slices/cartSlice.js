@@ -2,13 +2,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Helper function to load the cart from local storage
 const loadCartFromLocalStorage = () => {
-  const cart = localStorage.getItem("cart");
-  return cart ? JSON.parse(cart) : { products: [] };
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart"));
+    return cart || { products: [] };
+  } catch {
+    return { products: [] };
+  }
 };
 
 // Helper function to save the cart to local storage
 const saveCartToLocalStorage = (cart) => {
-  localStorage.setItem("cart", JSON.stringify(cart));
+  if (cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  } else {
+    localStorage.removeItem("cart");
+  }
 };
 
 // Fetch cart from user or guest
@@ -22,7 +30,7 @@ const fetchCart = createAsyncThunk(
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+            Authorization: `Bearer ${localStorage.getItem('userToken')}`,
             params: JSON.stringify({ userId, guestId }),
           },
         }
@@ -125,6 +133,7 @@ const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async ({ productId, size, color, userId, guestId }, { rejectWithValue }) => {
     try {
+      console.log("cart slice", productId, size, color, userId, guestId);
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}api/cart`,
         {
@@ -263,7 +272,6 @@ const cartSlice = createSlice({
       });
   },
 });
-
 
 export const { clearCart } = cartSlice.actions;
 export {

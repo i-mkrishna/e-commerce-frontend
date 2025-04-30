@@ -1,50 +1,31 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useFetcher, useNavigate } from "react-router-dom";
+import { fetchUserOrders } from "../../redux/slices/orderSlice";
 
 
 const MyOrderPage = () => {
-    const [orders, setOrders] = useState([]);
+   
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {orders, loading, error} = useSelector((state) => state.orders)
+
 
     useEffect(() => {
-        // Simulate fetching orders
+      dispatch(fetchUserOrders());
 
-        setTimeout(() => {
-            const mockOrders = [
-                {
-                    _id: "1234",
-                    createdAt: new Date(),
-                    shippingAdd: { city: "'New Delhi", country: "India" },
-                    orderItems: [
-                        {
-                            name: "Product 1",
-                            images: "https://picsum.photos/500?random=1",
-                        },
-                    ],
-                    totalPrice: 100,
-                    isPaid: true,
-                },
-                {
-                    _id: "67895",
-                    createdAt: new Date(),
-                    shippingAdd: { city: "'New Delhi", country: "India" },
-                    orderItems: [
-                        {
-                            name: "Product 2",
-                            images: "https://picsum.photos/500?random=2",
-                        },
-                    ],
-                    totalPrice: 100,
-                    isPaid: true,
-                },
-            ];
-            setOrders(mockOrders)
-        }, 1000);
-    }, []);
+    }, [dispatch])
+    
+    
 
     const handleRowClick = (orderId) => {
         navigate(`/order/${orderId}`);
     };
+
+
+    if(loading) return <p>loading ...</p>
+
+    if(error) return <p>Error : {error}</p>
 
     return (
         <div className="max-w-7xl mx-auto p-4 sm:p-6">

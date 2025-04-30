@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import register from "../../assets/register.webp";
 import { registration } from '../../redux/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -11,6 +12,17 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+    const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+    const { user, guestId, loading } = useSelector((state) => state.auth);
+
+
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +31,7 @@ const Register = () => {
         const res = await dispatch(registration({ name, email, password }));
 
         console.log("Registration response:", res); // Debugging line to check the response
-        
+
         if (res.meta.requestStatus === "fulfilled") {
             if (res.payload?.message && res.payload.message.includes("OTP")) {
                 // If OTP was sent or resent, show message and navigate to verify OTP page
@@ -72,9 +84,9 @@ const Register = () => {
                             placeholder='Enter your Password'
                         />
                     </div>
-                    <button type='submit' className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'>Sign Up</button>
+                    <button type='submit' className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'>{loading ? "loading..." : "Sign Up"}</button>
                     <p className='mt-6 text-center text-sm'>Have an account?{" "}
-                        <Link to="/login" className='text-blue-500'>Login</Link>
+                        <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className='text-blue-500'>Login</Link>
                     </p>
                 </form>
             </div>

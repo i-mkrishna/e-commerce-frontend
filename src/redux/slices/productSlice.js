@@ -18,6 +18,7 @@ const fetchProductsByFilters = createAsyncThunk(
     limit,
   }) => {
     const query = new URLSearchParams();
+    
     if (collection) query.append("collection", collection);
     if (size) query.append("size", size);
     if (color) query.append("color", color);
@@ -32,7 +33,7 @@ const fetchProductsByFilters = createAsyncThunk(
     if (limit) query.append("limit", limit);
 
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}api/products?${query.toString()}`,
+      `${import.meta.env.VITE_BACKEND_URL}api/products/query?${query.toString()}`,
       {
         method: "GET",
         headers: {
@@ -165,6 +166,8 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductsByFilters.fulfilled, (state, action) => {
         state.loading = false;
+        // console.log("slice",payload);
+        console.log("slicee", action.payload);
         state.products = action.payload;
       })
       .addCase(fetchProductsByFilters.rejected, (state, action) => {

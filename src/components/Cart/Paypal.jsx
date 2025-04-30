@@ -10,7 +10,7 @@ const Paypal = ({ amount, onSuccess, onError }) => {
                         purchase_units: [
                             {
                                 amount: {
-                                    value: amount, // make sure 'amount' is passed as prop
+                                    value: parseFloat(amount).toFixed(2),
                                 },
                             },
                         ],

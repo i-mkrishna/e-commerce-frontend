@@ -1,44 +1,27 @@
-
-const checkout = {
-    _id: "1234",
-    createdAt: new Date(),
-    checkoutItems: [
-        {
-            productId: "1",
-            name: "pant",
-            color: "Black",
-            size: "L",
-            price: 80,
-            quantity: 2,
-            image: "https://picsum.photos/140?random=1"
-        },
-        {
-            productId: "2",
-            name: "pant",
-            color: "Black",
-            size: "X",
-            price: 70,
-            quantity: 1,
-            image: "https://picsum.photos/140?random=2"
-        },
-        {
-            productId: "3",
-            name: "pant",
-            color: "Black",
-            size: "Xl",
-            price: 98,
-            quantity: 1,
-            image: "https://picsum.photos/140?random=3"
-        },
-    ],
-    shippingAddress: {
-        address: "New Delhi",
-        city: "New York",
-        country: "India",
-    }
-}
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "../../redux/slices/cartSlice";
+import { useEffect } from "react";
 
 const OrderConfirmation = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const {checkout} = useSelector((state) => state.checkout);
+
+
+    // clear cart 
+    useEffect(() => {
+      if(checkout && checkout._id){
+        dispatch(clearCart);
+        localStorage.removeItem("cart");
+      }
+      else{
+        navigate("/my-orders");
+      }
+    
+    }, [checkout, dispatch, navigate]);
+    
 
     const calculatedEstimatedDelivery = (createdAt) => {
         const orderDate = new Date(createdAt);

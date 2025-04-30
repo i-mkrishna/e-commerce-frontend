@@ -21,6 +21,8 @@ import VerifyOtp from "./components/Pages/VerifyOtp.jsx";
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import ProtectedRoutes from "./components/Common/ProtectedRoutes.jsx";
+import GoogleAuthSuccess from "./components/Pages/GoogleAuthSuccess.jsx";
 
 const token = localStorage.getItem("token");
 
@@ -33,7 +35,6 @@ if (token) {
     .then((res) => res.json())
     .then((data) => {
       // Set user in global state / context
-      console.log("User loaded:", data);
     })
     .catch((err) => {
       console.error("Token invalid or expired", err);
@@ -62,8 +63,13 @@ const App = () => {
             <Route path="/my-order" element={<MyOrderPage />} />
           </Route>
 
+          <Route path="/google/success" element={<GoogleAuthSuccess />} />
+
           {/* Admin Layout */}
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin" element={<ProtectedRoutes role="admin">
+            <AdminLayout />
+          </ProtectedRoutes>}>
+
             <Route index element={<AdminHomePage />} />
             <Route path="users" element={<UserManagment />} />
             <Route path="products" element={<ProductManagment />} />

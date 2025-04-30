@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { fetchProductById, fetchSimilarProducts } from "../../redux/slices/productSlice";
+import { addToCart} from "../../redux/slices/cartSlice"
 
 const ProductDetails = ({ productId }) => {
 
@@ -52,7 +53,7 @@ const ProductDetails = ({ productId }) => {
         setIsButtonDisabled(true);
 
         dispatch(addToCart({
-            productId: productFetchId._id,
+            productId: productFetchId,
             quantity,
             size: selectedSize,
             color: selectedColor,
@@ -172,7 +173,7 @@ const ProductDetails = ({ productId }) => {
                         <h2 className="text-2xl text-center font-medium mb-4">
                             YOu May Also Like
                         </h2>
-                        {/* <ProductGrid products={similarProducts} loading={loading} error={error}/> */}
+                        <ProductGrid products={similarProducts} loading={loading} error={error}/>
                     </div>
                 </div>
             )}

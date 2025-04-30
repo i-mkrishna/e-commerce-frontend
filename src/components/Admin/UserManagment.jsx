@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addUser, updateUser, deleteUser, fetchAllUsers } from "../../redux/slices/adminSlice"
 
 const UserManagment = () => {
-    const users = [
-        {
-            _id: 1,
-            name: "kp",
-            email: "kp@example.com",
-            role: "admin",
-        },
-    ];
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const { user } = useSelector((state) => state.auth);
+    const { users, loading, error } = useSelector((state) => state.admin);
+
+    useEffect(() => {
+        if (user && user.role !== "admin") {
+            navigate("/");
+        }
+
+    }, [user, navigate])
 
 
     const [formData, setFormData] = useState({
@@ -27,16 +35,9 @@ const UserManagment = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        dispatch(addUser(formData))
 
-        const newUser = {
-            _id: Date.now(), // simple unique ID
-            name: formData.name,
-            email: formData.email,
-            role: formData.role,
-        };
-
-        setUsers([...users, newUser]);
-
+        // Reset the form after submission
         setFormData({
             name: "",
             email: "",
@@ -47,23 +48,46 @@ const UserManagment = () => {
 
 
     const handleRoleChange = (userId, newRole) => {
-        setUsers(prev =>
-            prev.map(user =>
-                user._id === userId ? { ...user, role: newRole } : user
-            )
+        // Find the user by userId
+        const user = users.find((user) => user._id === userId);
+        if (!user || !user._id) {
+            console.error("Invalid user passed to handleRoleChange", user);
+            return;
+        }
+    
+        // Proceed with the role change
+        dispatch(
+            updateUser({
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: newRole,
+            })
         );
     };
 
     const handleDeleteUser = (userId) => {
-        if(window.confirm("Are you sure you want to delete this user?")){
-            console.log("deleting user with ID", userId);
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            dispatch(deleteUser(userId))
+            //console.log("deleting user with ID", userId);
         }
     };
+
+    useEffect(() => {
+      if(user && user.role==="admin"){
+        dispatch(fetchAllUsers());
+      }
+    
+    }, [dispatch, user]);
+    
 
 
     return (
         <div className="max-w-7xl mx-auto p-6">
             <h2 className="text-2xl font-bold mb-4">User Management</h2>
+
+            {loading && <p>loading...</p>}
+            {error && <p>Error: {error}</p>}
 
             {/* Add New User Form */}
             <div className="p-6 rounded-lg mb-6 border">
@@ -131,7 +155,7 @@ const UserManagment = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user) => (
+                        {users?.map((user) => (
                             <tr key={user._id} className="border-b hover:bg-gray-50">
                                 <td className="p-4 font-medium text-gray-900 whitespace-nowrap">
                                     {user.name}
