@@ -39,7 +39,7 @@ const fetchCart = createAsyncThunk(
         throw new Error("Failed to fetch cart");
       }
       const data = await response.json();
-      return data.cart; // Assuming the API returns the cart object
+      return data.cart; 
     } catch (error) {
       console.error("Error fetching cart:", error);
       return rejectWithValue(error.message);

@@ -85,7 +85,7 @@ const FilterSidebar = () => {
         const newPrice = e.target.value;
         setPriceRange([0, newPrice]);
         const newFilters = { ...filters, minPrice: 0, maxPrice: newPrice };
-        setFilters(newFilters); // ✅ correct
+        setFilters(newFilters); 
         updateURLParams(newFilters);
     };
     
@@ -216,13 +216,6 @@ const FilterSidebar = () => {
                     max={100}
                     value={priceRange[1]}
                     onChange={handlePriceChange}
-                    // onChange={(e) => {
-                    //     const value = Number(e.target.value);
-                    //     setPriceRange([0, value]);
-                    //     handleFilterChange({
-                    //         target: { name: "maxPrice", value, type: "range" },
-                    //     });
-                    // }} 
                     className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-gray-600 mt-2">

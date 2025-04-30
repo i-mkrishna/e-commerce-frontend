@@ -52,13 +52,13 @@ const Checkout = () => {
     const handlePaymentSuccess = async (details) => {
         try {
             const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}api/checkout/${checkoutId}/pay`, {
-                method: "PUT", // ✅ must be PUT
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("userToken")}`
                 },
                 body: JSON.stringify({
-                    paymentStatus: "Paid", // Make sure this is exactly "Paid"
+                    paymentStatus: "Paid",
                     paymentDetails: details
                 })
             });

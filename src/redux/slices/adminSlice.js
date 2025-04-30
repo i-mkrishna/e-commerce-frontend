@@ -153,7 +153,7 @@ const adminSlice = createSlice({
           (user) => user._id === action.payload._id
         );
         if (index !== -1) {
-          state.users[index] = action.payload; // Update the user in the array
+          state.users[index] = action.payload;
         }
       })
       .addCase(updateUser.rejected, (state, action) => {
@@ -170,7 +170,7 @@ const adminSlice = createSlice({
           (user) => user._id === action.payload._id
         );
         if (index !== -1) {
-          state.users.splice(index, 1); // Remove the user from the array
+          state.users.splice(index, 1);
         }
       })
       .addCase(deleteUser.rejected, (state, action) => {
