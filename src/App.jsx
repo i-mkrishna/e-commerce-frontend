@@ -53,7 +53,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="verify" element={<VerifyOtp />} /> {/* ✅ Added this line */}
+            <Route path="verify" element={<VerifyOtp />} />
             <Route path="profile" element={<Profile />} />
             <Route path="collections/:collection" element={<CollectionPage />} />
             <Route path="product/:id" element={<ProductDetails />} />
