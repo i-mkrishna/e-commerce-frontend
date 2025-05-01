@@ -12,7 +12,11 @@ const Navbar = () => {
   const dispatch = useDispatch()
   ;
   useEffect(() => {
-    dispatch(fetchUserFromToken());
+    const token = localStorage.getItem("userToken");
+
+    if(token){
+      dispatch(fetchUserFromToken());
+    }
 
   }, []);
 
