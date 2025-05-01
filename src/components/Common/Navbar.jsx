@@ -10,6 +10,7 @@ import { fetchCart } from "../../redux/slices/cartSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch()
+  ;
   useEffect(() => {
     dispatch(fetchUserFromToken());
 
@@ -26,8 +27,10 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    dispatch(fetchCart({userId: user._id }));
-    console.log("S", user._id, "sd")
+    if (user) {
+      dispatch(fetchCart({ userId: user?._id }));
+      console.log("S", user?._id, "sd")
+    }
   }, [user])
 
   const cartItemCnt = cart?.products.reduce((total, product) => total + product.quantity, 0);

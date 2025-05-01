@@ -23,7 +23,7 @@ import { Provider, useDispatch } from "react-redux";
 import store from "./redux/store";
 import ProtectedRoutes from "./components/Common/ProtectedRoutes.jsx";
 import GoogleAuthSuccess from "./components/Pages/GoogleAuthSuccess.jsx";
-import { useEffect } from "react";
+
 
 // const token = localStorage.getItem("token");
 
