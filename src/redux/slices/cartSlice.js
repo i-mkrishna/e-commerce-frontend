@@ -23,23 +23,28 @@ const saveCartToLocalStorage = (cart) => {
 const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ userId, guestId }, { rejectWithValue }) => {
+
+    console.log("fetching cart data : ",userId, guestId);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}api/cart`,
+        `${import.meta.env.VITE_BACKEND_URL}api/cart?${new URLSearchParams({ userId, guestId })}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-            params: JSON.stringify({ userId, guestId }),
+            // params: JSON.stringify({ userId, guestId }),
           },
         }
       );
+
       if (!response.ok) {
         throw new Error("Failed to fetch cart");
       }
       const data = await response.json();
-      return data.cart; 
+      console.log("cart info",data);
+      return data; 
+
     } catch (error) {
       console.error("Error fetching cart:", error);
       return rejectWithValue(error.message);

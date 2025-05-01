@@ -1,19 +1,34 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { HiOutlineUser, HiOutlineShoppingBag, HiBars3BottomRight } from 'react-icons/hi2'
 import SearchBar from "./SearchBar";
 import CartDrawer from "../Layout/CartDrawer";
 import { IoMdClose } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserFromToken } from "../../redux/slices/authSlice";
+import { fetchCart } from "../../redux/slices/cartSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchUserFromToken());
+
+  }, []);
+
+
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
-
+  const location = useLocation()
   const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
+
+
+  useEffect(() => {
+    dispatch(fetchCart({userId: user._id }));
+    console.log("S", user._id, "sd")
+  }, [user])
 
   const cartItemCnt = cart?.products.reduce((total, product) => total + product.quantity, 0);
 
@@ -25,6 +40,8 @@ const Navbar = () => {
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
+
+
 
   console.log("user info", user);
 
@@ -70,9 +87,9 @@ const Navbar = () => {
           {user && user.role === "admin" && (
             <Link to="/admin" className="block bg-black px-2 rounded text-sm text-white">Admin</Link>
           )}
-          <Link to={user ? "/profile" : "/login"} className="hover:text-black">
+          <a href={user ? "/profile" : "/login"} className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700" />
-          </Link>
+          </a>
           <button onClick={toggleCartDrawer} className="relative hover:text-black">
             <HiOutlineShoppingBag className="h-6 w-6 text-gray-700" />
             {cartItemCnt > 0 && (

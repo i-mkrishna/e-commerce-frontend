@@ -19,30 +19,34 @@ import EditProductPage from "./components/Admin/EditProductPage.jsx";
 import OrderManagement from "./components/Admin/OrderManagement.jsx";
 import VerifyOtp from "./components/Pages/VerifyOtp.jsx";
 
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./redux/store";
 import ProtectedRoutes from "./components/Common/ProtectedRoutes.jsx";
 import GoogleAuthSuccess from "./components/Pages/GoogleAuthSuccess.jsx";
+import { useEffect } from "react";
 
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
 
-if (token) {
-  fetch("/api/users/profile", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      // Set user in global state / context
-    })
-    .catch((err) => {
-      console.error("Token invalid or expired", err);
-      localStorage.removeItem("token");
-    });
-}
+// if (token) {
+//   fetch("/api/users/profile", {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   })
+//     .then((res) => res.json())
+//     .then((data) => {
+//       // Set user in global state / context
+//     })
+//     .catch((err) => {
+//       console.error("Token invalid or expired", err);
+//       localStorage.removeItem("token");
+//     });
+// }
 
 const App = () => {
+
+
+  
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -60,7 +64,7 @@ const App = () => {
             <Route path="checkout" element={<Checkout />} />
             <Route path="order-confirmation" element={<OrderConfirmation />} />
             <Route path="/order/:id" element={<OrderDetailsPage />} />
-            <Route path="/my-order" element={<MyOrderPage />} />
+            <Route path="/my-orders" element={<MyOrderPage />} />
           </Route>
 
           <Route path="/google/success" element={<GoogleAuthSuccess />} />
