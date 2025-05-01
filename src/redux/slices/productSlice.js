@@ -45,7 +45,7 @@ const fetchProductsByFilters = createAsyncThunk(
       throw new Error("Failed to fetch products");
     }
     const data = await response.json();
-    return data; // Assuming the API returns an array of products
+    return data;
   }
 );
 
@@ -66,7 +66,7 @@ const fetchProductById = createAsyncThunk("products/fetchById", async (id) => {
   }
   const data = await response.json();
   console.log(data)
-  return data; // Assuming the API returns a single product object
+  return data;
 });
 
 // Async thunk to fetch similar products and update the product
@@ -88,7 +88,7 @@ const updateProduct = createAsyncThunk(
       throw new Error("Failed to fetch similar products");
     }
     const data = await response.json();
-    return data.products; // Assuming the API returns an array of similar products
+    return data.products; 
   }
 );
 

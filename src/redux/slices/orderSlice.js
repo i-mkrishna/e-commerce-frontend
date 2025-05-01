@@ -52,6 +52,7 @@ export const fetchOrderDetails = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log(data);
       return data;
     } catch (error) {
       console.error("Error fetching order details:", error);
@@ -90,11 +91,11 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrderDetails.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload;
+        state.orderDetails = action.payload;
       })
       .addCase(fetchOrderDetails.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = action.payload;
       });
   },
 });

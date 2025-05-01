@@ -135,7 +135,7 @@ const verifyOtp = createAsyncThunk(
 export const fetchUserFromToken = createAsyncThunk(
   "auth/fetchUserFromToken",
   async (_, { rejectWithValue }) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("userToken");
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}api/users/profile`,

@@ -9,18 +9,19 @@ const GoogleAuthSuccess = () => {
   
 
   useEffect(() => {
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("token");
+console.log(token ,"token is here")
     // ✅ Delay execution slightly to ensure URL is fully loaded
     const timeout = setTimeout(() => {
-      const url = new URL(window.location.href);
-      const token = url.searchParams.get("token");
-
+   
       if (token) {
         console.log("Token found:", token);
-        localStorage.setItem("token", token);
+        localStorage.setItem("userToken", token);
         dispatch(fetchUserFromToken());
         // window.location = "http://localhost:5173";
-        // navigate("/");
-        window.location.reload();
+        navigate("/");
+        // window.location.reload();
       } else {
         console.error("No token found in URL");
         navigate("/login");
@@ -30,12 +31,14 @@ const GoogleAuthSuccess = () => {
     return () => clearTimeout(timeout);
   }, [dispatch, navigate]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if(token){
-      navigate("/");
-    }    
-  }, [])
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if(token){
+  //     dispatch(fetchUserFromToken());
+
+  //     navigate("/");
+  //   }    
+  // }, [])
   
 
   return <div>Logging in...</div>;
