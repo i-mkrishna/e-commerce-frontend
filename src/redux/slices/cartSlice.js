@@ -35,6 +35,7 @@ const fetchCart = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem('userToken')}`,
             // params: JSON.stringify({ userId, guestId }),
           },
+          credentials: "include",
         }
       );
 
@@ -75,6 +76,7 @@ const addToCart = createAsyncThunk(
             userId,
             guestId,
           }),
+          credentials: "include",
         }
       );
 
@@ -115,6 +117,7 @@ const updateCartItemQuantity = createAsyncThunk(
             guestId,
             userId,
           }),
+          credentials: "include",
         }
       );
 
@@ -147,6 +150,7 @@ const removeFromCart = createAsyncThunk(
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ productId, size, color, userId, guestId }),
+          credentials: "include",
         }
       );
 
@@ -178,6 +182,7 @@ const mergeCart = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify({ userId, guestId }),
+          credentials: "include",
         }
       );
 

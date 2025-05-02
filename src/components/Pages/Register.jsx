@@ -30,7 +30,7 @@ const Register = () => {
         // Dispatch registration action
         const res = await dispatch(registration({ name, email, password }));
 
-        console.log("Registration response:", res); // Debugging line to check the response
+        // console.log("Registration response:", res); 
 
         if (res.meta.requestStatus === "fulfilled") {
             if (res.payload?.message && res.payload.message.includes("OTP")) {

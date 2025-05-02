@@ -58,6 +58,7 @@ const loginUser = createAsyncThunk(
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
+          credentials: "include",
         }
       );
 
@@ -89,6 +90,7 @@ const registration = createAsyncThunk(
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
+          credentials: "include",
         }
       );
 
@@ -117,6 +119,7 @@ const verifyOtp = createAsyncThunk(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, otp }),
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -143,6 +146,7 @@ export const fetchUserFromToken = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
         }
       );
       if (!response.ok) throw new Error("Unauthorized");

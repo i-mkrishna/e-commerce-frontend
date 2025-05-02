@@ -13,6 +13,7 @@ export const fetchAllUsers = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include", 
         }
       );
       if (!response.ok) {
@@ -41,6 +42,7 @@ export const addUser = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify(userData),
+          credentials: "include", 
         }
       );
       if (!response.ok) {
@@ -69,6 +71,7 @@ export const updateUser = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify({ name, email, role }),
+          credentials: "include", 
         }
       );
       if (!response.ok) {
@@ -96,6 +99,7 @@ export const deleteUser = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include", 
         }
       );
       if (!response.ok) {

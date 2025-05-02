@@ -13,6 +13,7 @@ export const fetchAdminProducts = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -41,6 +42,7 @@ export const addProduct = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify(productData),
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -69,6 +71,7 @@ export const updateProduct = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify(productData),
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -96,6 +99,7 @@ export const deleteProduct = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
       if (!response.ok) {

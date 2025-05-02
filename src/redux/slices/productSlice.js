@@ -39,6 +39,7 @@ const fetchProductsByFilters = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -59,6 +60,7 @@ const fetchProductById = createAsyncThunk("products/fetchById", async (id) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
     }
   );
   if (!response.ok) {
@@ -82,6 +84,7 @@ const updateProduct = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
         body: JSON.stringify(productData),
+        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -104,6 +107,7 @@ const fetchSimilarProducts = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
     if (!response.ok) {

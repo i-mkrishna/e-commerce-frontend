@@ -107,7 +107,7 @@ const UserManagment = () => {
                         <label className="block text-gray-700">Email</label>
                         <input
                             type="email"
-                            name="email" // lowercase
+                            name="email" 
                             value={formData.email}
                             onChange={handleChange}
                             className="w-full p-2 border rounded"
@@ -117,7 +117,7 @@ const UserManagment = () => {
                         <label className="block text-gray-700">Password</label>
                         <input
                             type="password"
-                            name="password" // lowercase
+                            name="password" 
                             value={formData.password}
                             onChange={handleChange}
                             className="w-full p-2 border rounded"
