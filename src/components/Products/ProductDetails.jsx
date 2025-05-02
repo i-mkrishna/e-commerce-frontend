@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { fetchProductById, fetchSimilarProducts } from "../../redux/slices/productSlice";
-import { addToCart} from "../../redux/slices/cartSlice"
+import { addToCart } from "../../redux/slices/cartSlice"
 
 const ProductDetails = ({ productId }) => {
 
@@ -36,7 +36,7 @@ const ProductDetails = ({ productId }) => {
 
     }, [dispatch, productFetchId]);
 
-    
+
 
     useEffect(() => {
         if (selectedProduct?.images) {
@@ -112,14 +112,19 @@ const ProductDetails = ({ productId }) => {
                             <p className="text-xl text-gray-500 mb-2">${selectedProduct.price}</p>
                             <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
                             <div className="mb-4">
-                                <p className="text-gray-700">Colors:</p>
-                                <div className="flex-gap-2 mt-2">
+                                <p className="text-gray-700 mb-2 font-medium">Colors:</p>
+                                <div className="flex gap-3">
                                     {selectedProduct.colors.map((color) => (
                                         <button
                                             key={color}
                                             onClick={() => setSelectedColor(color)}
-                                            className={`w-8 h-8 rounded-full border ${selectedColor === color ? "border-4 border-black" : "border-gray-300"}`}
-                                            style={{ backgroundColor: color.toLowerCase(), filter: "brightness(0.5)" }}
+                                            className={`w-8 h-8 rounded-full border transition duration-150 ${selectedColor === color
+                                                    ? "ring-2 ring-black border-white"
+                                                    : "border-gray-400"
+                                                }`}
+                                            style={{
+                                                backgroundColor: color.toLowerCase(),
+                                            }}
                                         ></button>
                                     ))}
                                 </div>
@@ -173,7 +178,7 @@ const ProductDetails = ({ productId }) => {
                         <h2 className="text-2xl text-center font-medium mb-4">
                             YOu May Also Like
                         </h2>
-                        <ProductGrid products={similarProducts} loading={loading} error={error}/>
+                        <ProductGrid products={similarProducts} loading={loading} error={error} />
                     </div>
                 </div>
             )}

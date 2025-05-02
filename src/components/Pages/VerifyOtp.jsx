@@ -10,7 +10,7 @@ const VerifyOtp = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const email = location.state?.email || ""; // Get email from location state
+    const email = location.state?.email || ""; 
 
     const handleVerify = async (e) => {
         e.preventDefault();
@@ -20,7 +20,7 @@ const VerifyOtp = () => {
         if (res.meta.requestStatus === "fulfilled") {
             navigate("/login"); // Redirect to login after successful OTP verification
         } else {
-            setError(res.payload); // Show error message from the server
+            setError(res.payload); 
         }
     };
 
@@ -53,7 +53,7 @@ const VerifyOtp = () => {
                     <button
                         type='submit'
                         className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'
-                        disabled={!otp} // Disable button if OTP is empty
+                        disabled={!otp} 
                     >
                         Verify OTP
                     </button>

@@ -14,6 +14,7 @@ export const fetchUserOrders = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
 
@@ -44,6 +45,7 @@ export const fetchOrderDetails = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
 

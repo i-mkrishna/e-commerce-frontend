@@ -25,27 +25,8 @@ import ProtectedRoutes from "./components/Common/ProtectedRoutes.jsx";
 import GoogleAuthSuccess from "./components/Pages/GoogleAuthSuccess.jsx";
 
 
-// const token = localStorage.getItem("token");
-
-// if (token) {
-//   fetch("/api/users/profile", {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       // Set user in global state / context
-//     })
-//     .catch((err) => {
-//       console.error("Token invalid or expired", err);
-//       localStorage.removeItem("token");
-//     });
-// }
 
 const App = () => {
-
-
   
   return (
     <Provider store={store}>

@@ -13,6 +13,7 @@ export const fetchAllOrders = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -40,6 +41,7 @@ export const fetchOrderDetails = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -68,6 +70,7 @@ export const updateOrderStatus = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify({ status }),
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -95,6 +98,7 @@ export const deleteOrder = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          credentials: "include",
         }
       );
       if (!response.ok) {

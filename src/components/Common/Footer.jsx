@@ -23,12 +23,9 @@ const Footer = () => {
                 <div>
                     <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
                     <ul className="space-y-2 text-gray-600">
-
                         <li>
                             <Link to="#" className="hover:text-gray-500 transition-colors">Men's Top Wear</Link>
                         </li>
-
-
                         <li>
                             <Link to="#" className="hover:text-gray-500 transition-colors">Women's Top Wear</Link>
                         </li>
@@ -44,9 +41,11 @@ const Footer = () => {
                 <div>
                     <h3 className="text-lg text-gray-800 mb-4">Support</h3>
                     <ul className="space-y-2 text-gray-600">
-
                         <li>
-                            <Link to="#" className="hover:text-gray-500 transition-colors">Contact Us</Link>
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@example.com" target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-gray-500 transition-colors" >Contact Us
+                            </a>
                         </li>
                         <li>
                             <Link to="#" className="hover:text-gray-500 transition-colors">About Us</Link>
@@ -82,8 +81,13 @@ const Footer = () => {
                 </div>
             </div>
             {/* fotter bottom */}
-            <div className="container mx-auto mt-12 px-4 lg:px-0 border-t boder-gray-200 pt-6">
-                <p className="text-gray-500 text-sm tracking-tighter text-center">© 2025, CompileTab. All Rights Reserved.</p>
+            <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6 flex flex-col gap-2.5">
+                <p className="text-gray-500 text-sm tracking-tighter text-center">
+                    © 2025, CompileTab. All Rights Reserved.
+                </p>
+                <p className="text-gray-500 text-sm tracking-tighter text-center">
+                    Made with <span className="text-red-500">❤️</span> by kp.
+                </p>
             </div>
         </footer>
     )

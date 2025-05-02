@@ -17,34 +17,6 @@ const AdminHomePage = () => {
       
     }, [dispatch])
     
-
-    // const orders = [
-    //     {
-    //         _id: 123123,
-    //         user: {
-    //             name: "kp",
-    //         },
-    //         totalPrice: 110,
-    //         status: "Processing"
-    //     },
-    //     {
-    //         _id: 123124,
-    //         user: {
-    //             name: "kp",
-    //         },
-    //         totalPrice: 110,
-    //         status: "Processing"
-    //     },
-    //     {
-    //         _id: 123125,
-    //         user: {
-    //             name: "kp",
-    //         },
-    //         totalPrice: 110,
-    //         status: "Processing"
-    //     },
-    // ];
-
     return (
         <div className="max-w-7xl mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>

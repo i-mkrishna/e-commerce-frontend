@@ -8,13 +8,13 @@ const Topbar = () => {
     <div className="bg-rabbit text-white">
       <div className="container mx-auto flex justify-between items-center py-3 px-4">
         <div className="hidden md:flex items-center space-x-4">
-          <a href="#" className="hover:text-gray-300">
+          <a href="http://www.facebook.com" className="hover:text-gray-300">
             <TbBrandMeta className="h-5 w-5" />
           </a>
-          <a href="#" className="hover:text-gray-300">
+          <a href="http://www.instagram.com" className="hover:text-gray-300">
             <IoLogoInstagram className="h-5 w-5" />
           </a>
-          <a href="#" className="hover:text-gray-300">
+          <a href="http://www.x.com" className="hover:text-gray-300">
             <RiTwitterXLine className="h-4 w-4" />
           </a>
         </div>

@@ -15,6 +15,7 @@ export const createCheckout = createAsyncThunk(
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify(checkoutdata),
+          credentials: "include",
         }
       );
       if (!response.ok) {
